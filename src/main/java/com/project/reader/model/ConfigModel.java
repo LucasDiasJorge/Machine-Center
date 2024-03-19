@@ -15,8 +15,8 @@ public class ConfigModel extends AbstractModel{
     private String jsonConfig;
 
     @OneToOne()
-    @JoinColumn(name = "portal_id")
-    private MachineModel portalModel;
+    @JoinColumn(name = "machine_id")
+    private MachineModel machineModel;
 
     public String getJsonConfig() {
         return jsonConfig;
@@ -26,11 +26,11 @@ public class ConfigModel extends AbstractModel{
         this.jsonConfig = jsonConfig;
     }
 
-    public MachineModel getPortalModel() {
-        return portalModel;
+    public MachineModel getMachineModel() {
+        return machineModel;
     }
 
-    public void setPortalModel(MachineModel portalModel) {
-        this.portalModel = portalModel;
+    public void setPortalModel(MachineModel machineModel) {
+        this.machineModel = machineModel;
     }
 }

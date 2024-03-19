@@ -17,8 +17,7 @@ public class ConfigService {
 
 
     public String getConfig(String serial) {
-        ConfigModel config = null;
-        return config.getJsonConfig();
+        return "config";
     }
 
     public String saveConfig(String config, MachineModel portalModel){
@@ -27,5 +26,9 @@ public class ConfigService {
         configModel.setPortalModel(portalModel);
         repository.save(configModel);
         return configModel.getJsonConfig();
+    }
+
+    public String getDestination(String serial) {
+        return "url";
     }
 }

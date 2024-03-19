@@ -26,15 +26,20 @@ public class ConfigController {
     }
 
     @GetMapping("/{serial}")
-    public String getReaderConfig(@PathVariable String serial){
+    public String getMachineConfig(@PathVariable String serial){
         return configService.getConfig(serial);
+    }
+
+    @GetMapping("/destination/{serial}")
+    public String getMachineDestination(@PathVariable String serial){
+        return configService.getDestination(serial);
     }
 
     @PostMapping("/{serial}")
     public ResponseEntity<Response<String>> save(@Valid @RequestBody String config, @PathVariable String serial){
 
-        MachineModel portalModel = null;
-        String configModel = configService.saveConfig(config,portalModel);
+        MachineModel machineModel = null;
+        String configModel = configService.saveConfig(config,machineModel);
         return ResponseUtil.createResponse(configModel, 201, "201 CREATED");
     }
 }

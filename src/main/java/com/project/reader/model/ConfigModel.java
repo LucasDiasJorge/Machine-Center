@@ -14,6 +14,9 @@ public class ConfigModel extends AbstractModel{
     @Column(length = 1000)
     private String jsonConfig;
 
+    @Column(length = 64)
+    private String destination;
+
     @OneToOne()
     @JoinColumn(name = "machine_id")
     private MachineModel machineModel;

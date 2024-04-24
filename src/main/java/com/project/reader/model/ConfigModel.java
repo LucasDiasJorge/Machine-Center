@@ -5,8 +5,8 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
-@Audited(auditParents = {AbstractModel.class})
 @Entity
+@Audited(auditParents = {AbstractModel.class})
 @Table(name = "TB_CONFIG")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConfigModel extends AbstractModel{
@@ -18,8 +18,20 @@ public class ConfigModel extends AbstractModel{
     private String destination;
 
     @OneToOne()
-    @JoinColumn(name = "machine_id")
+    @JoinColumn(name = "machine_id", referencedColumnName = "id")
     private MachineModel machineModel;
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public void setMachineModel(MachineModel machineModel) {
+        this.machineModel = machineModel;
+    }
 
     public String getJsonConfig() {
         return jsonConfig;

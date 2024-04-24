@@ -27,7 +27,7 @@ public class ConfigController {
 
     @GetMapping("/{serial}")
     public String getMachineConfig(@PathVariable String serial){
-        return configService.getConfig(serial);
+        return configService.getConfig(serial).getJsonConfig();
     }
 
     @GetMapping("/destination/{serial}")

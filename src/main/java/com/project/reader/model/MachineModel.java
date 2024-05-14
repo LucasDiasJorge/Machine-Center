@@ -45,7 +45,6 @@ public class MachineModel extends AbstractModel {
     @Column(name = "in_antitheft")
     private boolean in;
 
-
     @Column(name = "get_config")
     private boolean getConfig;
 
@@ -58,10 +57,21 @@ public class MachineModel extends AbstractModel {
     @Column(name = "read")
     private boolean read;
 
+    @Column(name = "company_id")
+    private long companyId;
+
     @OneToOne(mappedBy = "machineModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ConfigModel configModel;
 
     public MachineModel() {
+    }
+
+    public long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
     }
 
     public ConfigModel getConfigModel() {

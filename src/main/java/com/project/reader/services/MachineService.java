@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -23,6 +24,10 @@ public class MachineService extends AbstractService<MachineModel, MachineReposit
 
     public MachineModel findBySerial(String serial){
         return repository.findBySerial(serial);
+    }
+
+    public List<MachineModel> findByCompanyId(Long companyId){
+        return repository.findByCompanyId(companyId);
     }
 
     public MachineModel update(Long id, MachineModel machineModel, Principal principal) throws AppException {

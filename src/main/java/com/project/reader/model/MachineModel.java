@@ -26,10 +26,6 @@ public class MachineModel extends AbstractModel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date expirationDate;
 
-    @Column(name = "portal_status", nullable = false,
-            columnDefinition = "int default 0")
-    private int status = 0;
-
     @Column(name = "serial", nullable = false, unique = true)
     private String serial;
 
@@ -38,26 +34,29 @@ public class MachineModel extends AbstractModel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date keepAlive;
 
-    @Column(name = "out_antitheft")
-    private boolean out;
+    @Column(name = "out_antitheft", nullable = false)
+    private boolean out = false;
 
 
-    @Column(name = "in_antitheft")
-    private boolean in;
+    @Column(name = "in_antitheft", nullable = false)
+    private boolean in = false;
 
     @Column(name = "get_config")
     private boolean getConfig;
 
-    @Column(name = "config")
-    private boolean config;
+    @Column(name = "config", nullable = false)
+    private boolean config = false;
 
-    @Column(name = "reboot")
-    private boolean reboot;
+    @Column(name = "reboot", nullable = false)
+    private boolean reboot = false;
 
-    @Column(name = "read")
-    private boolean read;
+    @Column(name = "read", nullable = false)
+    private boolean read = false;
 
-    @Column(name = "company_id")
+    @Column(name = "filter_timeout", nullable = false)
+    private int filterTimeout = 5;
+
+    @Column(name = "company_id", nullable = false)
     private long companyId;
 
     @OneToOne(mappedBy = "machineModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -80,6 +79,14 @@ public class MachineModel extends AbstractModel {
 
     public void setConfigModel(ConfigModel configModel) {
         this.configModel = configModel;
+    }
+
+    public int getFilterTimeout() {
+        return filterTimeout;
+    }
+
+    public void setFilterTimeout(int filterTimeout) {
+        this.filterTimeout = filterTimeout;
     }
 
     public boolean isIn() {
@@ -152,14 +159,6 @@ public class MachineModel extends AbstractModel {
 
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public String getSerial() {

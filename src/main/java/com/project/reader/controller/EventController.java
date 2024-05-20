@@ -39,9 +39,6 @@ public class EventController {
 
         MachineModel machine = machineService.findBySerial(serial);
         machine.setKeepAlive(now);
-        machine.setIn(false);
-        machine.setOut(false);
-        machineService.update(machine.getId(),machine,principal);
 
         ret.put("In",machine.isIn() ? 1 : 0);
         ret.put("Out",machine.isOut() ? 1 : 0);
@@ -50,6 +47,10 @@ public class EventController {
         ret.put("Read",machine.isRead() ? 1 : 0);
         ret.put("Filter",machine.getFilterTimeout());
         ret.put("Destination",configService.getConfig(machine).getDestination());
+
+        machine.setIn(false);
+        machine.setOut(false);
+        machineService.update(machine.getId(),machine,principal);
 
         return ret;
 
@@ -73,14 +74,14 @@ public class EventController {
     }
 
     @PreAuthorize("hasRole('MACHINE')")
-    @GetMapping("/out/{companyId}")
-    public Map<String,Integer> out(@PathVariable Long companyId, Principal principal) throws AppException {
+    @PutMapping("/out/{companyId}")
+    public Map<String,Integer> out(@PathVariable Long companyId, Principal principal) throws AppException, InterruptedException {
         Map<String,Integer> ret = new HashMap<>();
 
         List<MachineModel> machines = machineService.findByCompanyId(companyId);
 
         for (MachineModel machine:machines) {
-            machine.setIn(true);
+            machine.setOut(true);
             machineService.update(machine.getId(),machine, principal);
         }
 
@@ -89,7 +90,38 @@ public class EventController {
     }
 
     @PreAuthorize("hasRole('MACHINE')")
-    @GetMapping("/reboot/{serial}")
+    @PutMapping("/callback/in/{serial}")
+    public Map<String,Integer> inCallback(@PathVariable String serial, Principal principal) throws AppException, InterruptedException {
+
+        Map<String,Integer> ret = new HashMap<>();
+
+        MachineModel machine = machineService.findBySerial(serial);
+
+        machine.setIn(false);
+        machineService.update(machine.getId(),machine, principal);
+
+        return ret;
+
+    }
+
+    @PreAuthorize("hasRole('MACHINE')")
+    @PutMapping("/callback/out/{serial}")
+    public Map<String,Integer> outCallback(@PathVariable String serial, Principal principal) throws AppException, InterruptedException {
+        Map<String,Integer> ret = new HashMap<>();
+
+        MachineModel machine = machineService.findBySerial(serial);
+
+        machine.setOut(false);
+        machineService.update(machine.getId(),machine, principal);
+
+        Thread.sleep(5000);
+
+        return ret;
+
+    }
+
+    @PreAuthorize("hasRole('MACHINE')")
+    @PutMapping("/reboot/{serial}")
     public Map<String,Integer> reboot(@PathVariable String serial) {
 
         Map<String,Integer> ret = new HashMap<>();
@@ -103,8 +135,9 @@ public class EventController {
 
     }
 
+
     @PreAuthorize("hasRole('MACHINE')")
-    @GetMapping("/config/{serial}")
+    @PutMapping("/config/{serial}")
     public Map<String,Integer> config(@PathVariable String serial) {
 
         Map<String,Integer> ret = new HashMap<>();

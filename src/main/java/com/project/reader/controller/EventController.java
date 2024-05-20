@@ -48,10 +48,6 @@ public class EventController {
         ret.put("Filter",machine.getFilterTimeout());
         ret.put("Destination",configService.getConfig(machine).getDestination());
 
-        machine.setIn(false);
-        machine.setOut(false);
-        machineService.update(machine.getId(),machine,principal);
-
         return ret;
 
     }

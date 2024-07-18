@@ -46,6 +46,7 @@ public class EventController {
         ret.put("Reboot",machine.isReboot() ? 1 : 0);
         ret.put("Read",machine.isRead() ? 1 : 0);
         ret.put("Filter",machine.getFilterTimeout());
+        ret.put("Antitheft Reboot",-1);
         ret.put("Destination",configService.getConfig(machine).getDestination());
 
         return ret;
@@ -53,12 +54,43 @@ public class EventController {
     }
 
     @PreAuthorize("hasRole('MACHINE')")
-    @PutMapping("/in/{companyId}")
-    public Map<String,Integer> in(@PathVariable Long companyId, Principal principal) throws AppException {
+    @PostMapping("/keepalive/{serial}")
+    public Map<String,Object> keepaliveTwo(@PathVariable String serial, Principal principal, @RequestBody String body) throws AppException {
+
+        Map<String,Object> ret = new HashMap<>();
+
+        System.out.println(body);
+
+        Date now = new Date();
+
+        MachineModel machine = machineService.findBySerial(serial);
+        machine.setKeepAlive(now);
+        machine.setIfconfig(body);
+
+        ret.put("In",machine.isIn() ? 1 : 0);
+        ret.put("Out",machine.isOut() ? 1 : 0);
+        ret.put("Config",machine.isGetConfig() ? 1 : 0);
+        ret.put("Reboot",machine.isReboot() ? 1 : 0);
+        ret.put("Read",machine.isRead() ? 1 : 0);
+        ret.put("Filter",machine.getFilterTimeout());
+        ret.put("Antitheft Reboot",machine.getAntitheftTimestamp());
+        ret.put("Destination",configService.getConfig(machine).getDestination());
+
+        machineService.update(machine.getId(),machine,principal);
+
+        return ret;
+
+    }
+
+    @PreAuthorize("hasRole('MACHINE')")
+    @PutMapping("/in/{serial}")
+    public Map<String,Integer> in(@PathVariable String serial, Principal principal) throws AppException {
 
         Map<String,Integer> ret = new HashMap<>();
 
-        List<MachineModel> machines = machineService.findByCompanyId(companyId);
+        MachineModel machineModel = machineService.findBySerial(serial);
+
+        List<MachineModel> machines = machineService.findByCompanyId(machineModel.getCompanyId());
 
         for (MachineModel machine:machines) {
             machine.setIn(true);
@@ -70,11 +102,13 @@ public class EventController {
     }
 
     @PreAuthorize("hasRole('MACHINE')")
-    @PutMapping("/out/{companyId}")
-    public Map<String,Integer> out(@PathVariable Long companyId, Principal principal) throws AppException, InterruptedException {
+    @PutMapping("/out/{serial}")
+    public Map<String,Integer> out(@PathVariable String serial, Principal principal) throws AppException, InterruptedException {
         Map<String,Integer> ret = new HashMap<>();
 
-        List<MachineModel> machines = machineService.findByCompanyId(companyId);
+        MachineModel machineModel = machineService.findBySerial(serial);
+
+        List<MachineModel> machines = machineService.findByCompanyId(machineModel.getCompanyId());
 
         for (MachineModel machine:machines) {
             machine.setOut(true);

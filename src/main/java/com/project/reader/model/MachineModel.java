@@ -62,6 +62,12 @@ public class MachineModel extends AbstractModel {
     @OneToOne(mappedBy = "machineModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ConfigModel configModel;
 
+    @Column(name = "antitheft_timestamp")
+    private long antitheftTimestamp;
+
+    @Column(name = "ifconfig")
+    private String ifconfig;
+
     public MachineModel() {
     }
 
@@ -71,6 +77,22 @@ public class MachineModel extends AbstractModel {
 
     public void setCompanyId(long companyId) {
         this.companyId = companyId;
+    }
+
+    public long getAntitheftTimestamp() {
+        return antitheftTimestamp;
+    }
+
+    public void setAntitheftTimestamp(long antitheftTimestamp) {
+        this.antitheftTimestamp = antitheftTimestamp;
+    }
+
+    public String getIfconfig() {
+        return ifconfig;
+    }
+
+    public void setIfconfig(String ifconfig) {
+        this.ifconfig = ifconfig;
     }
 
     public ConfigModel getConfigModel() {

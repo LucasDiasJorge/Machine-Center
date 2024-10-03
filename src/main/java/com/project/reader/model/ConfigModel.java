@@ -11,7 +11,7 @@ import javax.persistence.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConfigModel extends AbstractModel{
 
-    @Column(length = 1000)
+    @Column(length = 10000)
     private String jsonConfig;
 
     @Column(length = 64)
